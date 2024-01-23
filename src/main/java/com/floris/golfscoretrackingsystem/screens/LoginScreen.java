@@ -1,6 +1,7 @@
 package com.floris.golfscoretrackingsystem.screens;
 
 import com.floris.golfscoretrackingsystem.Applicaction;
+import com.floris.golfscoretrackingsystem.classes.Golfer;
 import com.floris.golfscoretrackingsystem.classes.User;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -75,6 +76,7 @@ public class LoginScreen {
         int localMaxAttempts = maxAttempts;
         boolean loginSuccessful = false;
         User u = null;
+        Golfer g = null;
 
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
@@ -86,6 +88,7 @@ public class LoginScreen {
             while (maxAttempts > 0 && users.next()) {
                 if (usernameField.getText().equals(users.getString("username")) && passwordField.getText().equals(users.getString("password"))) {
                     u = new User(users.getString("username"), users.getString("password"));
+                    g = new Golfer(users.getString("firstname"), users.getString("lastname"), Integer.parseInt(users.getString("handicap")));
                     loginSuccessful = true;
                     break;
                 }
@@ -94,7 +97,7 @@ public class LoginScreen {
             users.close();
 
             if (loginSuccessful) {
-                showHomeScreen(u);
+                showHomeScreen(u, g);
             } else {
                 usernameField.clear();
                 passwordField.clear();
@@ -171,8 +174,7 @@ public class LoginScreen {
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-
-                showHomeScreen(new User(usernameField.getText(), passwordField.getText()));
+                showHomeScreen(new User(usernameField.getText(), passwordField.getText()), new Golfer(firstnameField.getText(), lastnameField.getText(), 54));
             } else {
                 usernameField.clear();
                 showAlert(Alert.AlertType.ERROR, "Error", "Username Already Taken", "The chosen username is already in use. Please choose another");
@@ -206,7 +208,7 @@ public class LoginScreen {
         return scene;
     }
 
-    private void showHomeScreen(User user) {
-        Applicaction.mainStage.setScene(Applicaction.scenes.put("home", new HomeScreen(user).getScene()));
+    private void showHomeScreen(User user, Golfer golfer) {
+        Applicaction.mainStage.setScene(Applicaction.scenes.put("home", new HomeScreen(user, golfer).getScene()));
     }
 }
