@@ -15,7 +15,7 @@ public class Applicaction extends Application {
     public static int[] applicationSize = {3024, 1964};
     @Override
     public void start(Stage stage) throws IOException {
-        connection = new DatabaseConn("localhost", "root", "root", "GolfScoreTrackingDB");
+        connection = new DatabaseConn("adainforma.tk", "golfscoretrackingsystem", "57Yg$6cq7", "bp2_golfscoretrackingsystem");
 
         scenes.put("login", new LoginScreen().getScene());
 
@@ -23,8 +23,6 @@ public class Applicaction extends Application {
 
         mainStage.setWidth(applicationSize[0]);
         mainStage.setHeight(applicationSize[1]);
-//        mainStage.setMaximized(true);
-//        mainStage.setResizable(true);
         mainStage.setTitle("Golf Score Tracking System");
 
         mainStage.setScene(scenes.get("login"));

@@ -29,10 +29,10 @@ public class LoginScreen {
         container.setAlignment(Pos.CENTER);
 
         FlowPane form = new FlowPane();
-        Text accountField = new Text("Account ?");
-        Button registerButton = new Button("Register");
-        Button loginButton = new Button("Login");
-        form.getChildren().addAll(accountField, registerButton, loginButton);
+        Text accountField = new Text("Account");
+        Button loginButton = new Button("Yes");
+        Button registerButton = new Button("No");
+        form.getChildren().addAll(accountField, loginButton, registerButton);
         form.setOrientation(Orientation.VERTICAL);
 
         loginButton.setOnAction(e -> {
@@ -97,6 +97,8 @@ public class LoginScreen {
             users.close();
 
             if (loginSuccessful) {
+                System.out.println("Login succesfull");
+                System.out.println("User: " + u);
                 showHomeScreen(u, g);
             } else {
                 usernameField.clear();
@@ -104,8 +106,6 @@ public class LoginScreen {
 
                 showAlert(Alert.AlertType.ERROR, "Error", "Something went wrong",
                         "Wrong Username or Password. Remaining attempts: " + localMaxAttempts);
-
-
                 maxAttempts--;
 
                 if (maxAttempts <= 0) {
@@ -148,7 +148,7 @@ public class LoginScreen {
     }
 
     private void handleRegister(TextField usernameField, PasswordField passwordField, TextField firstnameField, TextField lastnameField) {
-        boolean loginSuccessful = false;
+        boolean usernameTaken = false;
 
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty() || firstnameField.getText().isEmpty() || lastnameField.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
@@ -158,12 +158,12 @@ public class LoginScreen {
         try (ResultSet users = getUsers()) {
             while (users.next()) {
                 if (usernameField.getText().equals(users.getString("username"))) {
-                    loginSuccessful = true;
+                    usernameTaken = true;
                     break;
                 }
             }
 
-            if (!loginSuccessful) {
+            if (!usernameTaken) {
                 String insertQuery = "INSERT INTO Golfer(username, password, firstname, lastname) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement preparedStatement = Applicaction.connection.getConnection().prepareStatement(insertQuery)) {
                     preparedStatement.setString(1, usernameField.getText());
@@ -171,20 +171,24 @@ public class LoginScreen {
                     preparedStatement.setString(3, firstnameField.getText());
                     preparedStatement.setString(4, lastnameField.getText());
                     preparedStatement.executeUpdate();
+
+                    User newUser = new User(usernameField.getText(), passwordField.getText());
+                    Golfer newGolfer = new Golfer(firstnameField.getText(), lastnameField.getText(), 54);
+
+                    showHomeScreen(newUser, newGolfer);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                showHomeScreen(new User(usernameField.getText(), passwordField.getText()), new Golfer(firstnameField.getText(), lastnameField.getText(), 54));
             } else {
                 usernameField.clear();
                 showAlert(Alert.AlertType.ERROR, "Error", "Username Already Taken", "The chosen username is already in use. Please choose another");
-
             }
         } catch (SQLException ex) {
             showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             throw new RuntimeException(ex);
         }
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
@@ -196,7 +200,7 @@ public class LoginScreen {
 
     private ResultSet getUsers() {
         try {
-            ResultSet golfer = Applicaction.connection.query("SELECT * FROM golfer");
+            ResultSet golfer = Applicaction.connection.query("SELECT * FROM Golfer");
             return golfer;
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");

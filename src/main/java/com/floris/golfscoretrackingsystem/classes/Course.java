@@ -1,5 +1,8 @@
 package com.floris.golfscoretrackingsystem.classes;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Course {
 
     private String courseName;
@@ -8,6 +11,11 @@ public class Course {
     public Course(String courseName, String courseLocation) {
         this.courseName = courseName;
         this.courseLocation = courseLocation;
+    }
+
+    public Course(ResultSet rs) throws SQLException {
+        this.courseName = rs.getString("name");
+        this.courseLocation = rs.getString("location");
     }
 
     public String getCourseName() {

@@ -18,7 +18,7 @@ public class DatabaseConn {
 
     DatabaseConn(String hostname, String username, String password, String database) {
         properties.setProperty("hostname", hostname);
-        properties.setProperty("port", "8889");
+        properties.setProperty("port", "3306");
         properties.setProperty("user", username);
         properties.setProperty("password", password);
         properties.setProperty("database", database);
@@ -34,6 +34,19 @@ public class DatabaseConn {
             this.connection = DriverManager.getConnection(url, this.properties);
         } catch (SQLException ex) {
             this.connection = null;
+        }
+    }
+
+    public Connection getConnection() {
+        if(this.isConnected()) { this.connect(); }
+        return this.connection;
+    }
+
+    public boolean isConnected() {
+        try {
+            return this.connection == null || this.connection.isClosed();
+        } catch (SQLException e) {
+            return true;
         }
     }
 
@@ -54,17 +67,11 @@ public class DatabaseConn {
         return statement.executeQuery(query);
     }
 
-
-    public boolean isConnected() {
-        try {
-            return this.connection == null || this.connection.isClosed();
-        } catch (SQLException e) {
-            return true;
-        }
-    }
-
-    public Connection getConnection() {
+    public int updateQuery(String query) throws SQLException {
         if(this.isConnected()) { this.connect(); }
-        return this.connection;
+
+        Statement statement = this.connection.createStatement();
+
+        return statement.executeUpdate(query);
     }
 }

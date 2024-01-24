@@ -1,5 +1,11 @@
 package com.floris.golfscoretrackingsystem.classes;
 
+import com.floris.golfscoretrackingsystem.Applicaction;
+import javafx.scene.control.Alert;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Golfer {
     private String firstName;
     private String lastName;
@@ -9,6 +15,12 @@ public class Golfer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.handicap = handicap;
+    }
+
+    public Golfer(ResultSet rs) throws SQLException {
+        this.firstName = rs.getString("firstname");
+        this.lastName = rs.getString("lastname");
+        this.handicap = rs.getInt("handicap");
     }
 
     public String getFirstName() {

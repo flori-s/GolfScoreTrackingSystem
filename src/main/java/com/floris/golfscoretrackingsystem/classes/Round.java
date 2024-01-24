@@ -1,11 +1,13 @@
 package com.floris.golfscoretrackingsystem.classes;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class Round {
 
+    private int id;
     private Date datePlayed;
     private ArrayList<Golfclub> golfclubs = new ArrayList<>();
     private WheatherCondition wheatherCondition;
@@ -19,6 +21,19 @@ public class Round {
         this.course = course;
         this.golfer = golfer;
         this.score = score;
+    }
+
+    public Round(ResultSet rounds, WheatherCondition wc, Course c, Golfer g, Score s) throws SQLException {
+        this.id = rounds.getInt("id");
+        this.datePlayed = rounds.getDate("dateplayed");
+        this.wheatherCondition = wc;
+        this.course = c;
+        this.golfer = g;
+        this.score = s;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Date getDatePlayed() {

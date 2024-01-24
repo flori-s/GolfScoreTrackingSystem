@@ -1,5 +1,8 @@
 package com.floris.golfscoretrackingsystem.classes;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Score {
     private int strokes;
     private String notes;
@@ -7,6 +10,11 @@ public class Score {
     public Score(int strokes, String notes) {
         this.strokes = strokes;
         this.notes = notes;
+    }
+
+    public Score(ResultSet rs) throws SQLException {
+        this.strokes = rs.getInt("strokes");
+        this.notes = rs.getString("notes");
     }
 
     public int getStrokes() {
