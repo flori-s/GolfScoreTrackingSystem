@@ -24,6 +24,7 @@ public class Applicaction extends Application {
         mainStage.setWidth(applicationSize[0]);
         mainStage.setHeight(applicationSize[1]);
         mainStage.setTitle("Golf Score Tracking System");
+        mainStage.setResizable(false);
 
         mainStage.setScene(scenes.get("login"));
         mainStage.show();

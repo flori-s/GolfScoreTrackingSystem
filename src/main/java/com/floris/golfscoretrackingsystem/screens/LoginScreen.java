@@ -97,8 +97,6 @@ public class LoginScreen {
             users.close();
 
             if (loginSuccessful) {
-                System.out.println("Login succesfull");
-                System.out.println("User: " + u);
                 showHomeScreen(u, g);
             } else {
                 usernameField.clear();
@@ -213,6 +211,7 @@ public class LoginScreen {
     }
 
     private void showHomeScreen(User user, Golfer golfer) {
-        Applicaction.mainStage.setScene(Applicaction.scenes.put("home", new HomeScreen(user, golfer).getScene()));
+        HomeScreen homeScreen = new HomeScreen(user, golfer);
+        Applicaction.mainStage.setScene(homeScreen.getScene());
     }
 }

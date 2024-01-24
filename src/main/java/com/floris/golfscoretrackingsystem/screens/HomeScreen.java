@@ -13,7 +13,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import static com.floris.golfscoretrackingsystem.Applicaction.scenes;
@@ -30,34 +29,140 @@ public class HomeScreen {
         this.currentGolfer = golfer;
         this.currentUser = user;
         this.roundsPane = new TilePane();
-        roundsPane.setHgap(10);
+        roundsPane.setMaxSize(fullWidth - 300, fullHeight - 40);
+        roundsPane.setStyle("-fx-background-color: #FFFFFF;");
+        roundsPane.setPrefColumns(4);
+        roundsPane.setPrefRows(3);
+        roundsPane.setHgap(60);
         roundsPane.setVgap(10);
-        roundsPane.setPadding(new Insets(30, 0, 0, 0));
+        roundsPane.setPadding(new Insets(30, 10, 10, 60));
 
         Pane root = new Pane();
 
+        GridPane gridPane = new GridPane();
+        gridPane.add(getLogo(), 0, 0);
+        gridPane.add(getHeader(), 1, 0);
+        gridPane.add(getNavBar(), 0, 1);
+        gridPane.add(roundsPane, 1, 1);
+
 
         root.getChildren().add(gridPane);
-        getRounds();
+
+        long startTime = System.currentTimeMillis();
+        Platform.runLater(() -> {
+            getRounds();
+            long endTime = System.currentTimeMillis();
+            long loadTimeMillis = endTime - startTime;
+            double loadTimeSeconds = loadTimeMillis / 1000.0;
+            System.out.println("Rounds load time: " + loadTimeSeconds + " seconds");
+        });
+
         scene = new Scene(root, fullWidth, fullHeight);
         Applicaction.scenes.put("home", scene);
     }
 
+    private Pane getNavBar() {
+        FlowPane navBar = new FlowPane();
+        navBar.setId("navbar");
+        navBar.setOrientation(Orientation.HORIZONTAL);
+        navBar.setStyle("-fx-background-color: #16A34A;");
+        navBar.setPrefSize(50, fullHeight - 40);
+        navBar.setPadding(new Insets(30, 0, 0, 0));
+        navBar.getChildren().addAll(
+                generateNavItem("Overview", true),
+                generateNavItem("Rounds", false),
+                generateNavItem("Scores", false),
+                generateNavItem("Golfclubs", false),
+                generateNavItem("Update", false));
+
+        return navBar;
+    }
+
+    private FlowPane generateNavItem(String title, boolean active) {
+        FlowPane navItem = new FlowPane();
+        navItem.setStyle(active ? "-fx-background-color: #166534;" : "");
+        navItem.setPadding(new Insets(0, 0, 0, 20));
+        navItem.setAlignment(Pos.CENTER_LEFT);
+        navItem.setPrefSize(300, 40);
+        navItem.setHgap(40);
+
+        Text navItemText = new Text(title);
+        navItemText.setStyle("-fx-font-size: 20px; -fx-fill: white;");
+        navItem.getChildren().add(navItemText);
+
+        navItem.setOnMouseClicked(e -> {
+            if (title.equals("Overview")) {
+                HomeScreen homeScreen = new HomeScreen(currentUser, currentGolfer);
+            }
+            if (title.equals("Rounds")) {
+
+            }
+            if (title.equals("Scores")) {
+
+            }
+            if (title.equals("Golfclubs")) {
+
+            }
+            if (title.equals("Add")) {
+
+            }
+        });
+
+        return navItem;
+    }
+
+    private FlowPane getHeader() {
+        FlowPane header = new FlowPane();
+        header.setPrefSize(fullWidth - 300, 40);
+        header.setStyle("-fx-background-color: #166534;");
+        header.setOrientation(Orientation.VERTICAL);
+        header.setAlignment(Pos.CENTER);
+
+        FlowPane titlePane = new FlowPane();
+        titlePane.setHgap(20);
+        titlePane.setAlignment(Pos.CENTER_LEFT);
+        titlePane.setPadding(new Insets(0, 0, 0, 20));
+        titlePane.setPrefSize(fullWidth - 300, 40);
+        titlePane.setOrientation(Orientation.HORIZONTAL);
+        Text welcome = new Text("Welcome " + currentGolfer.getFirstName() + " " + currentGolfer.getLastName() + "!");
+        welcome.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
+
+        titlePane.getChildren().add(welcome);
+
+        header.getChildren().addAll(titlePane);
+
+        return header;
+    }
+
+    private FlowPane getLogo() {
+        FlowPane logo = new FlowPane();
+        logo.setStyle("-fx-background-color: #166534;");
+        logo.setAlignment(Pos.CENTER);
+        logo.setPrefSize(300, 40);
+
+        Text title = new Text("Golf Score Tracking System");
+        title.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
+
+        logo.getChildren().add(title);
+        return logo;
+    }
+
     private void getRounds() {
-        System.out.println("Current User: " + currentUser);
         try {
             if (currentUser != null) {
-                String query = "SELECT DISTINCT * FROM Round r JOIN WeatherCondition wc ON r.conditionID = wc.id JOIN Course c ON r.courseID = c.id JOIN Score s ON r.scoreID = s.id JOIN Golfer g ON r.golferID = g.id WHERE r.golferID = " + currentUser.getGolferId(currentUser) + " ORDER BY r.id ASC;";
-                System.out.println("SQL Query: " + query);
+                String query = "SELECT DISTINCT *, r.id AS round_id\n" +
+                        "FROM Round r\n" +
+                        "JOIN WeatherCondition wc ON r.conditionID = wc.id\n" +
+                        "JOIN Course c ON r.courseID = c.id\n" +
+                        "JOIN Score s ON r.scoreID = s.id\n" +
+                        "JOIN Golfer g ON r.golferID = g.id\n" +
+                        "WHERE r.golferID = " + currentUser.getGolferId(currentUser) + "\n" +
+                        "ORDER BY r.id ASC;";
 
                 ResultSet rounds = Applicaction.connection.query(query);
 
-                ResultSetMetaData metaData = rounds.getMetaData();
-                int columnCount = metaData.getColumnCount();
-                System.out.println("ResultSet Metadata - Column Count: " + columnCount);
-
                 while (rounds.next()) {
-                    System.out.println("Generating roundItem...");
+                    int roundsId = rounds.getInt("round_id");
                     Course c = new Course(rounds);
                     Golfer g = new Golfer(rounds);
                     Score s = new Score(rounds);
@@ -68,17 +173,10 @@ public class HomeScreen {
                     roundItem.prefWidth(200);
                     roundItem.prefHeight(200);
                     roundItem.setOnMouseClicked(event -> {
-                        try {
-                            int roundId = Integer.parseInt(rounds.getString("id"));
-                            showUpdateScreen(roundId);
-                        } catch (NumberFormatException | SQLException e) {
-                            showAlert(Alert.AlertType.ERROR, "Error", "Unknown ID", "Cannot find id for this round.");
-                            e.printStackTrace();
-                        }
+                        showUpdateScreen(roundsId);
                     });
 
                     if (!roundsPane.getChildren().contains(roundItem)) {
-                        System.out.println("Adding roundItem to roundsPane");
                         roundsPane.getChildren().add(roundItem);
                     }
                 }
@@ -109,16 +207,24 @@ public class HomeScreen {
 
     private Node generateRoundItem(Round r, Course c, Golfer g, Score s, WheatherCondition wc) {
         VBox roundItem = new VBox();
+        roundItem.setSpacing(10);
+        roundItem.setPadding(new Insets(10));
+        roundItem.setAlignment(Pos.CENTER);
+        roundItem.setStyle("-fx-background-color: #16A34A; -fx-background-radius: 10px;");
 
         Text date = new Text("Date: " + r.getDatePlayed());
+        date.setStyle("-fx-font-size: 18px; -fx-fill: #ffffff;");
         Text golfer = new Text("Golfer: " + g.getFirstName() + " " + g.getLastName());
+        golfer.setStyle("-fx-font-size: 18px; -fx-fill: #ffffff;");
         Text course = new Text("Course: " + c.getCourseName());
+        course.setStyle("-fx-font-size: 18px; -fx-fill: #ffffff;");
         Text score = new Text("Strokes: " + s.getStrokes());
+        score.setStyle("-fx-font-size: 18px; -fx-fill: #ffffff;");
         Text weather = new Text("Weather: " + wc.getConditionName() + " " + wc.getTemperature() + "°" + " " + wc.getWindSpeed() + "mph");
+        weather.setStyle("-fx-font-size: 18px; -fx-fill: #ffffff;");
 
         roundItem.getChildren().addAll(date, golfer, course, score, weather);
 
-        System.out.println("Generated roundItem for Round ID: " + r.getId());
 
         return roundItem;
     }
