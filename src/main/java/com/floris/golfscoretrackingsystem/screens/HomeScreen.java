@@ -9,42 +9,51 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static com.floris.golfscoretrackingsystem.Applicaction.scenes;
+import java.util.Objects;
 
 public class HomeScreen {
     private final Scene scene;
     private final TilePane roundsPane;
+    private final GridPane gridPane;
+    private final Pane root;
+    private FlowPane header;
+    private FlowPane navBar;
     private final int fullWidth = Applicaction.applicationSize[0];
     private final int fullHeight = Applicaction.applicationSize[1];
+    private double navItemWidth = 300;
+    private double navItemHeight = 40;
     public User currentUser;
     public Golfer currentGolfer;
 
     public HomeScreen(User user, Golfer golfer) {
         this.currentGolfer = golfer;
         this.currentUser = user;
+
+        this.root = new Pane();
+
+        this.gridPane = new GridPane();
+
         this.roundsPane = new TilePane();
-        roundsPane.setMaxSize(fullWidth - 300, fullHeight - 40);
-        roundsPane.setStyle("-fx-background-color: #FFFFFF;");
-        roundsPane.setPrefColumns(4);
-        roundsPane.setPrefRows(3);
-        roundsPane.setHgap(60);
-        roundsPane.setVgap(10);
-        roundsPane.setPadding(new Insets(30, 10, 10, 60));
 
-        Pane root = new Pane();
-
-        GridPane gridPane = new GridPane();
         gridPane.add(getLogo(), 0, 0);
         gridPane.add(getHeader(), 1, 0);
         gridPane.add(getNavBar(), 0, 1);
         gridPane.add(roundsPane, 1, 1);
 
+        roundsPane.setMaxSize(fullWidth-navBar.getWidth(), fullHeight - header.getHeight());
+        roundsPane.setStyle("-fx-background-color: #FFFFFF;");
+        roundsPane.setPrefColumns(4);
+        roundsPane.setPrefRows(3);
+        roundsPane.setHgap(60);
+        roundsPane.setVgap(60);
+        roundsPane.setPadding(new Insets(30, 10, 10, 60));
 
         root.getChildren().add(gridPane);
 
@@ -58,11 +67,11 @@ public class HomeScreen {
         });
 
         scene = new Scene(root, fullWidth, fullHeight);
-        Applicaction.scenes.put("home", scene);
+        Applicaction.scenes.put("Home", scene);
     }
 
     private Pane getNavBar() {
-        FlowPane navBar = new FlowPane();
+        this.navBar = new FlowPane();
         navBar.setId("navbar");
         navBar.setOrientation(Orientation.HORIZONTAL);
         navBar.setStyle("-fx-background-color: #16A34A;");
@@ -73,7 +82,7 @@ public class HomeScreen {
                 generateNavItem("Rounds", false),
                 generateNavItem("Scores", false),
                 generateNavItem("Golfclubs", false),
-                generateNavItem("Update", false));
+                generateNavItem("Add", false));
 
         return navBar;
     }
@@ -83,16 +92,25 @@ public class HomeScreen {
         navItem.setStyle(active ? "-fx-background-color: #166534;" : "");
         navItem.setPadding(new Insets(0, 0, 0, 20));
         navItem.setAlignment(Pos.CENTER_LEFT);
-        navItem.setPrefSize(300, 40);
+        navItem.setPrefSize(navItemWidth, navItemHeight);
         navItem.setHgap(40);
 
         Text navItemText = new Text(title);
         navItemText.setStyle("-fx-font-size: 20px; -fx-fill: white;");
         navItem.getChildren().add(navItemText);
 
+        if (active) {
+            ImageView tee = new ImageView();
+            tee.setFitWidth(50);
+            tee.setPreserveRatio(true);
+            tee.setImage(new Image(Objects.requireNonNull(Applicaction.class.getResource("images/pointer.png")).toString()));
+            navItem.getChildren().add(tee);
+        }
+
+
         navItem.setOnMouseClicked(e -> {
             if (title.equals("Overview")) {
-                HomeScreen homeScreen = new HomeScreen(currentUser, currentGolfer);
+                this.reload();
             }
             if (title.equals("Rounds")) {
 
@@ -111,9 +129,10 @@ public class HomeScreen {
         return navItem;
     }
 
+
     private FlowPane getHeader() {
-        FlowPane header = new FlowPane();
-        header.setPrefSize(fullWidth - 300, 40);
+        header = new FlowPane();
+        header.setPrefSize(fullWidth - navItemWidth, navItemHeight);
         header.setStyle("-fx-background-color: #166534;");
         header.setOrientation(Orientation.VERTICAL);
         header.setAlignment(Pos.CENTER);
@@ -122,9 +141,9 @@ public class HomeScreen {
         titlePane.setHgap(20);
         titlePane.setAlignment(Pos.CENTER_LEFT);
         titlePane.setPadding(new Insets(0, 0, 0, 20));
-        titlePane.setPrefSize(fullWidth - 300, 40);
+        titlePane.setPrefSize(fullWidth - navItemWidth, navItemHeight);
         titlePane.setOrientation(Orientation.HORIZONTAL);
-        Text welcome = new Text("Welcome " + currentGolfer.getFirstName() + " " + currentGolfer.getLastName() + "!");
+        Text welcome = new Text("Welcome " + currentGolfer.getFirstName() + " " + currentGolfer.getLastName() + " !");
         welcome.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
 
         titlePane.getChildren().add(welcome);
@@ -138,12 +157,17 @@ public class HomeScreen {
         FlowPane logo = new FlowPane();
         logo.setStyle("-fx-background-color: #166534;");
         logo.setAlignment(Pos.CENTER);
-        logo.setPrefSize(300, 40);
+        logo.setPrefSize(navItemWidth, navItemHeight);
+
+        ImageView golfer = new ImageView();
+        golfer.setFitWidth(25);
+        golfer.setPreserveRatio(true);
+        golfer.setImage(new Image(Objects.requireNonNull(Applicaction.class.getResource("images/logo.png")).toString()));
 
         Text title = new Text("Golf Score Tracking System");
         title.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
 
-        logo.getChildren().add(title);
+        logo.getChildren().addAll(golfer, title);
         return logo;
     }
 
@@ -182,7 +206,7 @@ public class HomeScreen {
                 }
             }
         } catch (SQLException e) {
-            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Error", "SQL Exception", e.getMessage()));
+            showAlert(Alert.AlertType.ERROR, "Error", "SQL Exception", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -193,16 +217,6 @@ public class HomeScreen {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    private void showUpdateScreen(int id) {
-        UpdateScreen updateScreen = new UpdateScreen(id);
-        scenes.put("Update", updateScreen.getScene());
-        Applicaction.mainStage.setScene(scenes.get("Update"));
     }
 
     private Node generateRoundItem(Round r, Course c, Golfer g, Score s, WheatherCondition wc) {
@@ -227,5 +241,34 @@ public class HomeScreen {
 
 
         return roundItem;
+    }
+
+    public void reload() {
+        roundsPane.getChildren().clear();
+        long startTime = System.currentTimeMillis();
+        run(() -> {
+            getRounds();
+            long endTime = System.currentTimeMillis();
+            long loadTimeMillis = endTime - startTime;
+            double loadTimeSeconds = loadTimeMillis / 1000.0;
+            System.out.println("Rounds load time: " + loadTimeSeconds + " seconds");
+        });
+    }
+
+    public static void run(Runnable treatment) {
+        if (treatment == null) throw new IllegalArgumentException("The treatment to perform can not be null");
+
+        if (Platform.isFxApplicationThread()) treatment.run();
+        else Platform.runLater(treatment);
+    }
+
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    private void showUpdateScreen(int id) {
+        UpdateDeleteScreen updateScreen = new UpdateDeleteScreen(id, this);
+        Applicaction.mainStage.setScene(updateScreen.getScene());
     }
 }

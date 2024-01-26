@@ -12,7 +12,7 @@ public class Applicaction extends Application {
     public static Stage mainStage;
     public static DatabaseConn connection;
     public static HashMap<String, Scene> scenes = new HashMap<>();
-    public static int[] applicationSize = {3024, 1964};
+    public static int[] applicationSize = {1512, 873};
     @Override
     public void start(Stage stage) throws IOException {
         connection = new DatabaseConn("adainforma.tk", "golfscoretrackingsystem", "57Yg$6cq7", "bp2_golfscoretrackingsystem");

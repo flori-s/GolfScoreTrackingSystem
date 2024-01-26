@@ -3,6 +3,7 @@ package com.floris.golfscoretrackingsystem.screens;
 import com.floris.golfscoretrackingsystem.Applicaction;
 import com.floris.golfscoretrackingsystem.classes.Golfer;
 import com.floris.golfscoretrackingsystem.classes.User;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,13 +11,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class LoginScreen {
     private final Scene scene;
@@ -28,12 +30,25 @@ public class LoginScreen {
         container.setMinSize(Applicaction.applicationSize[0], Applicaction.applicationSize[1]);
         container.setAlignment(Pos.CENTER);
 
+        Image backgroundImage = new Image(Objects.requireNonNull(Applicaction.class.getResource("images/loginBackground.jpeg")).toString());
+
+        BackgroundImage background = new BackgroundImage(
+                backgroundImage,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+
+        Background backgroundWithImage = new Background(background);
+
         FlowPane form = new FlowPane();
-        Text accountField = new Text("Account");
-        Button loginButton = new Button("Yes");
-        Button registerButton = new Button("No");
-        form.getChildren().addAll(accountField, loginButton, registerButton);
-        form.setOrientation(Orientation.VERTICAL);
+        form.setPadding(new Insets(10, 10, 10, 10));
+        form.setMaxSize(350, 200);
+        form.setOrientation(Orientation.HORIZONTAL);
+        form.setHgap(10);
+        Button loginButton = new Button("Login");
+        Button registerButton = new Button("Register");
+        form.getChildren().addAll(loginButton, registerButton);
+        form.setStyle("-fx-background-radius: 10; -fx-background-color: white;");
 
         loginButton.setOnAction(e -> {
             form.getChildren().clear();
@@ -49,7 +64,8 @@ public class LoginScreen {
         form.setVgap(10);
         form.setPrefSize(500, 600);
 
-        container.getChildren().add(form);
+        container.setBackground(backgroundWithImage);
+        container.getChildren().addAll(form);
         scene = new Scene(container);
     }
 
