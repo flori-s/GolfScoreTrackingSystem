@@ -206,17 +206,9 @@ public class HomeScreen {
                 }
             }
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "SQL Exception", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private Node generateRoundItem(Round r, Course c, Golfer g, Score s, WheatherCondition wc) {
@@ -262,6 +254,13 @@ public class HomeScreen {
         else Platform.runLater(treatment);
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
     public Scene getScene() {
         return scene;

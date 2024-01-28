@@ -48,7 +48,7 @@ public class LoginScreen {
         Button loginButton = new Button("Login");
         Button registerButton = new Button("Register");
         form.getChildren().addAll(loginButton, registerButton);
-        form.setStyle("-fx-background-radius: 10; -fx-background-color: white;");
+        form.setStyle("-fx-background-radius: 10; -fx-background-color: #16A34A; -fx-fill: #FFFFFF;");
 
         loginButton.setOnAction(e -> {
             form.getChildren().clear();
