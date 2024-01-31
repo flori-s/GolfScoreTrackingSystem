@@ -1,0 +1,37 @@
+/* Container */
+.container {
+    -fx-background-image: url('../images/loginBackground.jpeg');
+}
+
+/* Form */
+.form {
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #16A34A;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: #16A34A;
+    -fx-border-radius: 5;
+    -fx-prompt-text-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+
+}
+
+/* Password Fields */
+.password-field {
+    -fx-background-color: #16A34A;
+    -fx-border-radius: 5;
+    -fx-prompt-text-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+/* Buttons */
+.button.login-button, .button.register-button {
+    -fx-background-color: #16A34A;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}

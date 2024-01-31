@@ -27,28 +27,22 @@ public class LoginScreen {
 
     public LoginScreen() {
         FlowPane container = new FlowPane();
+        container.getStyleClass().add("container");
         container.setMinSize(Applicaction.applicationSize[0], Applicaction.applicationSize[1]);
         container.setAlignment(Pos.CENTER);
 
-        Image backgroundImage = new Image(Objects.requireNonNull(Applicaction.class.getResource("images/loginBackground.jpeg")).toString());
-
-        BackgroundImage background = new BackgroundImage(
-                backgroundImage,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-
-        Background backgroundWithImage = new Background(background);
-
         FlowPane form = new FlowPane();
+        form.getStyleClass().add("form");
         form.setPadding(new Insets(10, 10, 10, 10));
         form.setMaxSize(350, 200);
         form.setOrientation(Orientation.HORIZONTAL);
         form.setHgap(10);
         Button loginButton = new Button("Login");
+        loginButton.getStyleClass().add("login-button");
         Button registerButton = new Button("Register");
+        registerButton.getStyleClass().add("register-button");
         form.getChildren().addAll(loginButton, registerButton);
-        form.setStyle("-fx-background-radius: 10; -fx-background-color: #16A34A; -fx-fill: #FFFFFF;");
+
 
         loginButton.setOnAction(e -> {
             form.getChildren().clear();
@@ -64,9 +58,10 @@ public class LoginScreen {
         form.setVgap(10);
         form.setPrefSize(500, 600);
 
-        container.setBackground(backgroundWithImage);
         container.getChildren().addAll(form);
         scene = new Scene(container);
+        scene.getStylesheets().add(Objects.requireNonNull(Applicaction.class.getResource("stylesheets/loginscreen.css")).toString());
+
     }
 
     private VBox getLoginForm() {
@@ -74,12 +69,15 @@ public class LoginScreen {
         loginForm.setSpacing(10);
 
         TextField usernameField = new TextField();
+        usernameField.getStyleClass().add("text-field");
         usernameField.setPromptText("Username");
 
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("password-field");
         passwordField.setPromptText("Password");
 
         Button loginButton = new Button("Login");
+        loginButton.getStyleClass().add("login-button");
 
         loginForm.getChildren().addAll(usernameField, passwordField, loginButton);
 
@@ -139,18 +137,23 @@ public class LoginScreen {
         registerForm.setSpacing(10);
 
         TextField firstnameField = new TextField();
+        firstnameField.getStyleClass().add("text-field");
         firstnameField.setPromptText("Firstname");
 
         TextField lastnameField = new TextField();
+        lastnameField.getStyleClass().add("text-field");
         lastnameField.setPromptText("Lastname");
 
         TextField usernameField = new TextField();
+        usernameField.getStyleClass().add("text-field");
         usernameField.setPromptText("Username");
 
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("password-field");
         passwordField.setPromptText("Password");
 
         Button registerButton = new Button("Register");
+        registerButton.getStyleClass().add("register-button");
 
         registerButton.setOnAction(e -> {
             handleRegister(usernameField, passwordField, firstnameField, lastnameField);
