@@ -59,13 +59,15 @@ public class UpdateDeleteScreen {
 
         root.getChildren().add(form);
         scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(Applicaction.class.getResource("stylesheets/updatedeletescreen.css")).toString());
+
         Applicaction.scenes.put("UpdateDelete", scene);
     }
 
     private FlowPane getUpdateForm(int id) throws SQLException {
         FlowPane form = new FlowPane();
         form.setPadding(new Insets(10, 10, 10, 10));
-        form.setStyle("-fx-background-radius: 5; -fx-background-color: #16A34A;");
+        form.getStyleClass().add("update-delete-screen");
         form.setPrefHeight(320);
         form.setOrientation(Orientation.VERTICAL);
 
@@ -113,11 +115,11 @@ public class UpdateDeleteScreen {
         Label label = new Label(labelText);
         label.setMinWidth(100);
         label.setAlignment(Pos.BASELINE_LEFT);
-        label.setStyle("-fx-text-fill: #FFFFFF;");
+        label.getStyleClass().add("label");
 
         TextField textField = new TextField(textFieldValue);
         textField.setAlignment(Pos.BASELINE_LEFT);
-        textField.setStyle("-fx-background-color: #16A34A; -fx-text-fill: #FFFFFF; -fx-border-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);");
+        textField.getStyleClass().add("text-field");
 
         HBox hbox = new HBox(5, label, textField);
         hbox.setPadding(new Insets(0, 0, 10, 0));
@@ -129,14 +131,15 @@ public class UpdateDeleteScreen {
         Label label = new Label(labelText);
         label.setMinWidth(100);
         label.setAlignment(Pos.BASELINE_LEFT);
-        label.setStyle("-fx-text-fill: #FFFFFF;");
+        label.getStyleClass().add("label");
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         LocalDate initialDate = LocalDate.parse(textFieldValue, dateFormatter);
 
         DatePicker datePicker = new DatePicker(initialDate);
-        datePicker.setStyle("-fx-background-color: #16A34A; -fx-text-fill: #FFFFFF; -fx-border-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);");
+        datePicker.setEditable(false);
+        datePicker.getStyleClass().add("date-field");
 
         HBox hbox = new HBox(5, label, datePicker);
         hbox.setPadding(new Insets(0, 0, 10, 0));
@@ -146,7 +149,7 @@ public class UpdateDeleteScreen {
 
     private Button getButton() {
         Button updateButton = new Button("Back");
-        updateButton.setStyle("-fx-background-color: #16A34A; -fx-text-fill: #FFFFFF; -fx-border-radius: 5; -fx-padding: 10px 20px;");
+        updateButton.getStyleClass().add("button");
 
         updateButton.setOnAction(e -> {
             homeScreen.reload();
@@ -157,7 +160,7 @@ public class UpdateDeleteScreen {
 
     private Button getUpdateButton() {
         Button updateButton = new Button("Update");
-        updateButton.setStyle("-fx-background-color: #16A34A; -fx-text-fill: #FFFFFF; -fx-border-radius: 5; -fx-padding: 10px 20px;");
+        updateButton.getStyleClass().add("button");
 
         updateButton.setOnAction(e -> {
             Map<String, String> fieldValues = getFormFieldValues();
@@ -198,7 +201,7 @@ public class UpdateDeleteScreen {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Update");
             alert.setHeaderText(null);
-            alert.setContentText("Are you sure you want to update this round?");
+            alert.setContentText("Are you sure you want to update this round?" + "\n" + "Date: " + newDate + "\n" + " Course: " + newName + "\n" + " Location: " + newLocation + "\n" + "Strokes: " + newStrokes + "\n" + "Notes: " + newNotes + "\n" + "Temperature: " + newTemperature + "\n" + "Wind Speed: " + newWindSpeed);
 
             if (alert.showAndWait().get() == ButtonType.OK) {
                 try {
@@ -254,7 +257,6 @@ public class UpdateDeleteScreen {
             }
         }
 
-
         return fieldValues;
     }
 
@@ -270,4 +272,3 @@ public class UpdateDeleteScreen {
         return scene;
     }
 }
-

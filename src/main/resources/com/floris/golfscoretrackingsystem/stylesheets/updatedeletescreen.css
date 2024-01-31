@@ -1,0 +1,33 @@
+.update-delete-screen {
+    -fx-background-radius: 5;
+    -fx-background-color: #16A34A;
+}
+
+.label {
+    -fx-text-fill: #FFFFFF;
+}
+
+.text-field {
+    -fx-background-color: #16A34A;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+.date-field {
+    -fx-background-color: #16A34A;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+.date-field .date-picker-popup > .month-year-pane {
+    -fx-background-color: #16A34A;
+}
+
+.button {
+    -fx-background-color: #16A34A;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-radius: 5;
+    -fx-padding: 10px 20px;
+}
