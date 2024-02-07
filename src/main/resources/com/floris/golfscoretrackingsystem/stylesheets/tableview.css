@@ -1,8 +1,5 @@
-.roundsPane {
+.tableview {
     -fx-background-color: #166534;
-    -fx-padding: 30px 1em 1em 77px;
-    -fx-Hgap: 50;
-    -fx-vgap: 120;
 }
 
 .navbar {
@@ -24,14 +21,3 @@
     -fx-font-size: 20px;
     -fx-fill: white;
 }
-
-.rounddItem {
-    -fx-background-color: #16A34A;
-    -fx-background-radius: 10px;
-}
-
-.rounddItem Text {
-    -fx-font-size: 18px;
-    -fx-fill: #ffffff;
-}
-

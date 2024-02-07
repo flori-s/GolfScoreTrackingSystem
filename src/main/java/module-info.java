@@ -3,6 +3,7 @@ module com.floris.golfscoretrackingsystem {
     requires java.sql;
 
 
-    opens com.floris.golfscoretrackingsystem to javafx.fxml;
+    opens com.floris.golfscoretrackingsystem.classes to javafx.base;
     exports com.floris.golfscoretrackingsystem;
+    opens com.floris.golfscoretrackingsystem.utils to javafx.base;
 }

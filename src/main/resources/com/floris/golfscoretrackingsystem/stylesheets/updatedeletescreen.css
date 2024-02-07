@@ -1,3 +1,7 @@
+.form {
+    -fx-background-color: #166534;
+}
+
 .update-delete-screen {
     -fx-background-radius: 5;
     -fx-background-color: #16A34A;
@@ -10,6 +14,7 @@
 .text-field {
     -fx-background-color: #16A34A;
     -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: #FFFFFF;
     -fx-border-radius: 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
 }
@@ -30,4 +35,23 @@
     -fx-text-fill: #FFFFFF;
     -fx-border-radius: 5;
     -fx-padding: 10px 20px;
+}
+
+.navbar {
+    -fx-orientation: HORIZONTAL;
+    -fx-background-color: #16A34A;
+    -fx-hgap: 40;
+}
+
+.navitem {
+    -fx-background-color: transparent;
+}
+
+.active {
+    -fx-background-color: #166534;
+}
+
+.navitemText {
+    -fx-font-size: 20px;
+    -fx-fill: white;
 }
