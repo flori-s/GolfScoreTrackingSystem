@@ -10,23 +10,23 @@ public class Round {
     private int id;
     private Date datePlayed;
     private ArrayList<Golfclub> golfclubs = new ArrayList<>();
-    private WheatherCondition wheatherCondition;
+    private WeatherCondition weatherCondition;
     private Course course;
     private Golfer golfer;
     private Score score;
 
-    public Round(Date datePlayed, WheatherCondition wheatherCondition, Course course, Golfer golfer, Score score) {
+    public Round(Date datePlayed, WeatherCondition weatherCondition, Course course, Golfer golfer, Score score) {
         this.datePlayed = datePlayed;
-        this.wheatherCondition = wheatherCondition;
+        this.weatherCondition = weatherCondition;
         this.course = course;
         this.golfer = golfer;
         this.score = score;
     }
 
-    public Round(ResultSet rounds, WheatherCondition wc, Course c, Golfer g, Score s) throws SQLException {
+    public Round(ResultSet rounds, WeatherCondition wc, Course c, Golfer g, Score s) throws SQLException {
         this.id = rounds.getInt("id");
         this.datePlayed = rounds.getDate("dateplayed");
-        this.wheatherCondition = wc;
+        this.weatherCondition = wc;
         this.course = c;
         this.golfer = g;
         this.score = s;
@@ -44,12 +44,12 @@ public class Round {
         this.datePlayed = datePlayed;
     }
 
-    public WheatherCondition getWheatherCondition() {
-        return wheatherCondition;
+    public WeatherCondition getWheatherCondition() {
+        return weatherCondition;
     }
 
-    public void setWheatherCondition(WheatherCondition wheatherCondition) {
-        this.wheatherCondition = wheatherCondition;
+    public void setWheatherCondition(WeatherCondition weatherCondition) {
+        this.weatherCondition = weatherCondition;
     }
 
     public Course getCourse() {

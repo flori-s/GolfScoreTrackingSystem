@@ -1,38 +1,47 @@
 package com.floris.golfscoretrackingsystem.classes;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Course {
 
-    private String courseName;
-    private String courseLocation;
+    private final StringProperty courseName = new SimpleStringProperty();
+    private final StringProperty courseLocation = new SimpleStringProperty();
 
     public Course(String courseName, String courseLocation) {
-        this.courseName = courseName;
-        this.courseLocation = courseLocation;
+        setCourseName(courseName);
+        setCourseLocation(courseLocation);
     }
 
     public Course(ResultSet rs) throws SQLException {
-        this.courseName = rs.getString("name");
-        this.courseLocation = rs.getString("location");
+        setCourseName(rs.getString("name"));
+        setCourseLocation(rs.getString("location"));
     }
 
-    public String getCourseName() {
+    public StringProperty courseNameProperty() {
         return courseName;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getCourseLocation() {
+    public StringProperty courseLocationProperty() {
         return courseLocation;
     }
 
-    public void setCourseLocation(String courseLocation) {
-        this.courseLocation = courseLocation;
+    public String getCourseName() {
+        return courseName.get();
     }
 
+    public void setCourseName(String courseName) {
+        this.courseName.set(courseName);
+    }
 
+    public String getCourseLocation() {
+        return courseLocation.get();
+    }
+
+    public void setCourseLocation(String courseLocation) {
+        this.courseLocation.set(courseLocation);
+    }
 }

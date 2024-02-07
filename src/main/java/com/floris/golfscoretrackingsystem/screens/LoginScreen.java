@@ -1,6 +1,7 @@
 package com.floris.golfscoretrackingsystem.screens;
 
 import com.floris.golfscoretrackingsystem.Applicaction;
+import com.floris.golfscoretrackingsystem.classes.Controller;
 import com.floris.golfscoretrackingsystem.classes.Golfer;
 import com.floris.golfscoretrackingsystem.classes.User;
 import javafx.geometry.Insets;
@@ -11,9 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,7 +60,6 @@ public class LoginScreen {
         container.getChildren().addAll(form);
         scene = new Scene(container);
         scene.getStylesheets().add(Objects.requireNonNull(Applicaction.class.getResource("stylesheets/loginscreen.css")).toString());
-
     }
 
     private VBox getLoginForm() {
@@ -93,7 +91,7 @@ public class LoginScreen {
         Golfer g = null;
 
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
             return;
         }
 
@@ -116,17 +114,17 @@ public class LoginScreen {
                 usernameField.clear();
                 passwordField.clear();
 
-                showAlert(Alert.AlertType.ERROR, "Error", "Something went wrong",
+                Controller.showAlert(Alert.AlertType.ERROR, "Error", "Something went wrong",
                         "Wrong Username or Password. Remaining attempts: " + localMaxAttempts);
                 maxAttempts--;
 
                 if (maxAttempts <= 0) {
-                    showAlert(Alert.AlertType.ERROR, "Error", "Something went wrong", "Contact customer service: customerservice@GSTS.com");
+                    Controller.showAlert(Alert.AlertType.ERROR, "Error", "Something went wrong", "Contact customer service: customerservice@GSTS.com");
                     Applicaction.mainStage.close();
                 }
             }
         } catch (SQLException ex) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             throw new RuntimeException(ex);
         }
     }
@@ -168,7 +166,7 @@ public class LoginScreen {
         boolean usernameTaken = false;
 
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty() || firstnameField.getText().isEmpty() || lastnameField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
             return;
         }
 
@@ -198,21 +196,12 @@ public class LoginScreen {
                 }
             } else {
                 usernameField.clear();
-                showAlert(Alert.AlertType.ERROR, "Error", "Username Already Taken", "The chosen username is already in use. Please choose another");
+                Controller.showAlert(Alert.AlertType.ERROR, "Error", "Username Already Taken", "The chosen username is already in use. Please choose another");
             }
         } catch (SQLException ex) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             throw new RuntimeException(ex);
         }
-    }
-
-
-    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private ResultSet getUsers() {
@@ -220,7 +209,7 @@ public class LoginScreen {
             ResultSet golfer = Applicaction.connection.query("SELECT * FROM Golfer");
             return golfer;
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             throw new RuntimeException(e);
         }
     }

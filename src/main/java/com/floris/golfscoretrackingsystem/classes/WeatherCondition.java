@@ -3,19 +3,19 @@ package com.floris.golfscoretrackingsystem.classes;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WheatherCondition {
+public class WeatherCondition {
 
     private String conditionName;
     private int windSpeed;
     private int temperature;
 
-    public WheatherCondition(String conditionName, int windSpeed, int temperature) {
+    public WeatherCondition(String conditionName, int windSpeed, int temperature) {
         this.conditionName = conditionName;
         this.windSpeed = windSpeed;
         this.temperature = temperature;
     }
 
-    public WheatherCondition(ResultSet rs) throws SQLException {
+    public WeatherCondition(ResultSet rs) throws SQLException {
         this.conditionName = rs.getString("condition");
         this.windSpeed = rs.getInt("windspeed");
         this.temperature = rs.getInt("temperature");
