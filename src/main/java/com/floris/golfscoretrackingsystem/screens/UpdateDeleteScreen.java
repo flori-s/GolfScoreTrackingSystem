@@ -1,14 +1,21 @@
 package com.floris.golfscoretrackingsystem.screens;
 
 import com.floris.golfscoretrackingsystem.Applicaction;
+import com.floris.golfscoretrackingsystem.classes.Controller;
+import com.floris.golfscoretrackingsystem.classes.Golfer;
+import com.floris.golfscoretrackingsystem.classes.User;
+import com.floris.golfscoretrackingsystem.utils.UpdateDeleteScreenUtils;
+import com.floris.golfscoretrackingsystem.utils.Utils;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,47 +29,57 @@ public class UpdateDeleteScreen {
 
     private final Scene scene;
     private final HomeScreen homeScreen;
-    private final Pane root;
     private final FlowPane form;
-    private final int fullWidth = Applicaction.applicationSize[0];
-    private final int fullHeight = Applicaction.applicationSize[1];
-    int currentRound;
+    private final int currentRound;
+    public Golfer currentGolfer;
+    public User currentUser;
 
-    public UpdateDeleteScreen(int id, HomeScreen homeScreen) {
+    public UpdateDeleteScreen(int id, HomeScreen homeScreen, Golfer golfer, User user) {
+        this.currentGolfer = golfer;
         this.currentRound = id;
+        this.currentUser = user;
         this.homeScreen = homeScreen;
-        this.root = new Pane();
-
-        Image backgroundImage = new Image(Objects.requireNonNull(Applicaction.class.getResource("images/updateDeletebackground.jpeg")).toString());
-
-        BackgroundImage background = new BackgroundImage(
-                backgroundImage,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-
-        Background backgroundWithImage = new Background(background);
+        Pane root = new Pane();
+        GridPane gridPane = new GridPane();
 
         this.form = new FlowPane();
-        form.setPadding(new Insets(10, 10, 10, 10));
-        form.setPrefSize(fullWidth, fullHeight);
-        form.setOrientation(Orientation.VERTICAL);
-        form.setAlignment(Pos.CENTER);
-        form.setBackground(backgroundWithImage);
-        form.setVgap(10);
-
         try {
-            form.getChildren().addAll(getUpdateForm(currentRound), getButton(), getUpdateButton());
+            form.getChildren().addAll(getUpdateForm(currentRound), getUpdateButton());
+            form.getStyleClass().add("form");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        root.getChildren().add(form);
+        gridPane.add(getLogo(), 0, 0);
+        gridPane.add(getHeader(), 1, 0);
+        gridPane.add(getNavBar(), 0, 1);
+        gridPane.add(form, 1, 1);
+
+        form.setPadding(new Insets(10, 10, 10, 10));
+        form.setPrefSize(Applicaction.applicationSize[0] - 300, Applicaction.applicationSize[1] - 40);
+        form.setOrientation(Orientation.VERTICAL);
+        form.setAlignment(Pos.CENTER);
+        form.setVgap(10);
+
+        root.getChildren().add(gridPane);
         scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(Applicaction.class.getResource("stylesheets/updatedeletescreen.css")).toString());
 
         Applicaction.scenes.put("UpdateDelete", scene);
     }
+
+    private FlowPane getNavBar() {
+        return UpdateDeleteScreenUtils.getNavBar("Rounds", homeScreen, currentGolfer, currentUser);
+    }
+
+    private FlowPane getHeader() {
+        return Utils.getHeader(currentGolfer);
+    }
+
+    private FlowPane getLogo() {
+        return Utils.getLogo();
+    }
+
 
     private FlowPane getUpdateForm(int id) throws SQLException {
         FlowPane form = new FlowPane();
@@ -93,69 +110,22 @@ public class UpdateDeleteScreen {
                 String windSpeed = rounds.getString("windspeed") + " km/h";
 
                 form.getChildren().addAll(
-                        createDateFieldBox("Date: ", datePlayed),
-                        createFieldBox("Course: ", name),
-                        createFieldBox("Location: ", location),
-                        createFieldBox("Strokes: ", strokes),
-                        createFieldBox("Notes: ", notes),
-                        createFieldBox("Condition: ", condition),
-                        createFieldBox("Temperature: ", temperature),
-                        createFieldBox("Wind Speed: ", windSpeed)
+                        Controller.createDateFieldBox("Date: ", datePlayed),
+                        Controller.createFieldBox("Course: ", name),
+                        Controller.createFieldBox("Location: ", location),
+                        Controller.createFieldBox("Strokes: ", strokes),
+                        Controller.createFieldBox("Notes: ", notes),
+                        Controller.createFieldBox("Condition: ", condition),
+                        Controller.createFieldBox("Temperature: ", temperature),
+                        Controller.createFieldBox("Wind Speed: ", windSpeed)
                 );
             }
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+            Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
             throw new RuntimeException(e);
         }
 
         return form;
-    }
-
-    private HBox createFieldBox(String labelText, String textFieldValue) {
-        Label label = new Label(labelText);
-        label.setMinWidth(100);
-        label.setAlignment(Pos.BASELINE_LEFT);
-        label.getStyleClass().add("label");
-
-        TextField textField = new TextField(textFieldValue);
-        textField.setAlignment(Pos.BASELINE_LEFT);
-        textField.getStyleClass().add("text-field");
-
-        HBox hbox = new HBox(5, label, textField);
-        hbox.setPadding(new Insets(0, 0, 10, 0));
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        return hbox;
-    }
-
-    private HBox createDateFieldBox(String labelText, String textFieldValue) {
-        Label label = new Label(labelText);
-        label.setMinWidth(100);
-        label.setAlignment(Pos.BASELINE_LEFT);
-        label.getStyleClass().add("label");
-
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        LocalDate initialDate = LocalDate.parse(textFieldValue, dateFormatter);
-
-        DatePicker datePicker = new DatePicker(initialDate);
-        datePicker.setEditable(false);
-        datePicker.getStyleClass().add("date-field");
-
-        HBox hbox = new HBox(5, label, datePicker);
-        hbox.setPadding(new Insets(0, 0, 10, 0));
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        return hbox;
-    }
-
-    private Button getButton() {
-        Button updateButton = new Button("Back");
-        updateButton.getStyleClass().add("button");
-
-        updateButton.setOnAction(e -> {
-            homeScreen.reload();
-            Applicaction.mainStage.setScene(homeScreen.getScene());
-        });
-        return updateButton;
     }
 
     private Button getUpdateButton() {
@@ -209,7 +179,7 @@ public class UpdateDeleteScreen {
                     homeScreen.reload();
                     Applicaction.mainStage.setScene(homeScreen.getScene());
                 } catch (SQLException exception) {
-                    showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+                    Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
                     exception.printStackTrace();
                 }
             }
@@ -260,13 +230,6 @@ public class UpdateDeleteScreen {
         return fieldValues;
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     public Scene getScene() {
         return scene;
