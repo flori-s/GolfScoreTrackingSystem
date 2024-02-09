@@ -16,19 +16,28 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Het ScoreScreen klasse biedt functionaliteit om de scores van een gebruiker weer te geven.
+ */
 public class ScoreScreen {
     private final Scene scene;
     private final HomeScreen homeScreen;
     private final FlowPane tableView;
     public User currentUser;
-
     public Golfer currentGolfer;
 
+    /**
+     * Constructor voor ScoreScreen.
+     * @param homeScreen Het startscherm van de applicatie.
+     * @param user De huidige gebruiker.
+     * @param golfer De bijbehorende golferinformatie.
+     */
     public ScoreScreen(HomeScreen homeScreen, User user, Golfer golfer) {
         this.homeScreen = homeScreen;
         this.currentGolfer = golfer;
@@ -58,21 +67,38 @@ public class ScoreScreen {
         Applicaction.scenes.put("Scores", scene);
     }
 
+    /**
+     * Geeft de navigatiebalk van het scorescherm terug.
+     * @return FlowPane met de navigatiebalk.
+     */
     public FlowPane getNavBar() {
         FlowPane navBar = ScoreScreenUtils.getNavBar("Scores", this, tableView, homeScreen, currentGolfer, currentUser);
         return navBar;
     }
 
+    /**
+     * Geeft de header van het scorescherm terug.
+     * @return FlowPane met de header.
+     */
     private FlowPane getHeader() {
         FlowPane header = Utils.getHeader(currentGolfer);
         return header;
     }
 
+    /**
+     * Geeft het logo van het scorescherm terug.
+     * @return FlowPane met het logo.
+     */
     private FlowPane getLogo() {
         FlowPane logo = Utils.getLogo();
         return logo;
     }
 
+    /**
+     * Haalt de scores op vanuit de database en geeft deze weer in een TableView.
+     * @return FlowPane met de TableView van scores.
+     * @throws SQLException Als er een SQL-fout optreedt tijdens het ophalen van de scores.
+     */
     private FlowPane getScores() throws SQLException {
         FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER);
@@ -82,9 +108,12 @@ public class ScoreScreen {
                 "FROM Round\n" +
                 "JOIN Score ON Round.scoreID = Score.id\n" +
                 "JOIN Golfer ON Round.golferID = Golfer.id\n" +
-                "WHERE Golfer.username = '" + currentUser.getUsername() + "';";
+                "WHERE Golfer.username = ?;";
 
-        ResultSet scores = Applicaction.connection.query(query);
+        PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(query);
+        preparedStatement.setString(1, currentUser.getUsername());
+
+        ResultSet scores = preparedStatement.executeQuery();
 
         ArrayList<Score> scoreList = new ArrayList<>();
 
@@ -110,6 +139,10 @@ public class ScoreScreen {
         return null;
     }
 
+    /**
+     * Vernieuwt de inhoud van het TableView met scores.
+     * @param tableView De FlowPane die het TableView bevat.
+     */
     public void reload(FlowPane tableView) {
         tableView.getChildren().clear();
         Controller.run(() -> {
@@ -121,8 +154,11 @@ public class ScoreScreen {
         });
     }
 
+    /**
+     * Geeft het Scene-object van het scorescherm terug.
+     * @return Het Scene-object van het scorescherm.
+     */
     public Scene getScene() {
         return scene;
     }
-
 }

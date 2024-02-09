@@ -12,6 +12,9 @@ import javafx.scene.text.Text;
 
 import java.util.Objects;
 
+/**
+ * De Utils klasse bevat hulpmethoden voor het maken van header en logo elementen.
+ */
 public class Utils {
     private static FlowPane header;
     private static FlowPane logo;
@@ -19,10 +22,16 @@ public class Utils {
     private static final int navItemHeight = 40;
     private static final int fullWidth = Applicaction.applicationSize[0];
     private static final int fullHeight = Applicaction.applicationSize[1];
+
+    /**
+     * Geeft de header van het scherm terug.
+     * @param currentGolfer De huidige golfer.
+     * @return De FlowPane met de header.
+     */
     public static FlowPane getHeader(Golfer currentGolfer) {
         header = new FlowPane();
         header.setPrefSize(fullWidth - navItemWidth, navItemHeight);
-        header.setStyle("-fx-background-color: #166534;");
+        header.getStyleClass().add("header");
         header.setOrientation(Orientation.VERTICAL);
         header.setAlignment(Pos.CENTER);
 
@@ -32,8 +41,8 @@ public class Utils {
         titlePane.setPadding(new Insets(0, 0, 0, 20));
         titlePane.setPrefSize(fullWidth - navItemWidth, navItemHeight);
         titlePane.setOrientation(Orientation.HORIZONTAL);
+
         Text welcome = new Text("Welcome " + currentGolfer.getFirstName() + " " + currentGolfer.getLastName() + " !");
-        welcome.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
 
         titlePane.getChildren().add(welcome);
 
@@ -42,9 +51,13 @@ public class Utils {
         return header;
     }
 
+    /**
+     * Geeft het logo van de applicatie terug.
+     * @return De FlowPane met het logo.
+     */
     public static FlowPane getLogo() {
         logo = new FlowPane();
-        logo.setStyle("-fx-background-color: #166534;");
+        logo.getStyleClass().add("logo");
         logo.setAlignment(Pos.CENTER);
         logo.setPrefSize(navItemWidth, navItemHeight);
 
@@ -54,7 +67,6 @@ public class Utils {
         golfer.setImage(new Image(Objects.requireNonNull(Applicaction.class.getResource("images/logo.png")).toString()));
 
         Text title = new Text("Golf Score Tracking System");
-        title.setStyle("-fx-font-size: 20px; -fx-fill: #ffffff;");
 
         logo.getChildren().addAll(golfer, title);
         return logo;

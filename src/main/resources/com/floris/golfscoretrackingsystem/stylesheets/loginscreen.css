@@ -1,37 +1,37 @@
 /* Container */
 .container {
-    -fx-background-image: url('../images/loginBackground.jpeg');
+    -fx-background-image: url('../images/loginBackground.jpeg'); /* Achtergrondafbeelding */
 }
 
-/* Form */
+/* Formulier */
 .form {
-    -fx-padding: 10;
-    -fx-background-radius: 10;
-    -fx-background-color: #16A34A;
+    -fx-padding: 10; /* Binnenste opvulling */
+    -fx-background-radius: 10; /* Afronding van de achtergrond */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
 }
 
-/* Text Fields */
+/* Tekstvelden */
 .text-field {
-    -fx-background-color: #16A34A;
-    -fx-border-radius: 5;
-    -fx-prompt-text-fill: #FFFFFF;
-    -fx-text-fill: #FFFFFF;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
-
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-border-radius: 5; /* Afronding van de randen */
+    -fx-prompt-text-fill: #FFFFFF; /* Tekstkleur van de aanduiding */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
-/* Password Fields */
+/* Wachtwoordvelden */
 .password-field {
-    -fx-background-color: #16A34A;
-    -fx-border-radius: 5;
-    -fx-prompt-text-fill: #FFFFFF;
-    -fx-text-fill: #FFFFFF;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-border-radius: 5; /* Afronding van de randen */
+    -fx-prompt-text-fill: #FFFFFF; /* Tekstkleur van de aanduiding */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
-/* Buttons */
+/* Knoppen */
 .button.login-button, .button.register-button {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-cursor: hand; /* Cursorstijl */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }

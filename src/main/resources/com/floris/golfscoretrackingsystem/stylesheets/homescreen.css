@@ -1,37 +1,67 @@
+/* Stijlen voor het paneel met rondes */
 .roundsPane {
-    -fx-background-color: #166534;
-    -fx-padding: 30px 1em 1em 77px;
-    -fx-Hgap: 50;
-    -fx-vgap: 120;
+    -fx-background-color: #166534; /* Achtergrondkleur */
+    -fx-padding: 30px 1em 1em 77px; /* Binnenste opvulling */
+    -fx-Hgap: 50; /* Horizontale ruimte tussen elementen */
+    -fx-vgap: 120; /* Verticale ruimte tussen elementen */
 }
 
+/* Stijlen voor de navigatiebalk */
 .navbar {
-    -fx-orientation: HORIZONTAL;
-    -fx-background-color: #16A34A;
-    -fx-hgap: 40;
+    -fx-orientation: HORIZONTAL; /* Horizontale oriëntatie */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-hgap: 40; /* Horizontale afstand tussen items */
 }
 
+/* Stijlen voor navigatie-items */
 .navitem {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent; /* Transparante achtergrondkleur */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
+/* Stijlen voor actief navigatie-item */
 .active {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur van actief item */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
-
+/* Stijlen voor de tekst van navigatie-items */
 .navitemText {
-    -fx-font-size: 20px;
-    -fx-fill: white;
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: white; /* Tekstkleur */
 }
 
-.rounddItem {
-    -fx-background-color: #16A34A;
-    -fx-background-radius: 10px;
+/* Stijlen voor een ronde-item */
+.roundItem {
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-background-radius: 10px; /* Afronding van de randen */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
-.rounddItem Text {
-    -fx-font-size: 18px;
-    -fx-fill: #ffffff;
+/* Stijlen voor de tekst in een ronde-item */
+.roundItem Text {
+    -fx-font-size: 18px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
 }
 
+/* Stijlen voor het logo */
+.logo {
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Stijlen voor de tekst van het logo */
+.logo Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
+}
+
+/* Stijlen voor de koptekst */
+.header{
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Stijlen voor de tekst van de koptekst */
+.header Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
+}

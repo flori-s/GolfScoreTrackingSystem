@@ -1,23 +1,51 @@
+/* TableView */
 .tableview {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur */
 }
 
+/* Navigatiebalk */
 .navbar {
-    -fx-orientation: HORIZONTAL;
-    -fx-background-color: #16A34A;
-    -fx-hgap: 40;
+    -fx-orientation: HORIZONTAL; /* Oriëntatie */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-hgap: 40; /* Horizontale tussenruimte */
 }
 
+/* Navigatie-item */
 .navitem {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent; /* Achtergrondkleur */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
+/* Actief navigatie-item */
 .active {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
-
+/* Tekst van navigatie-item */
 .navitemText {
-    -fx-font-size: 20px;
-    -fx-fill: white;
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: white; /* Tekstkleur */
+}
+
+/* Logo */
+.logo {
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Tekst van logo */
+.logo Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
+}
+
+/* Header */
+.header{
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Tekst van header */
+.header Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
 }

@@ -19,11 +19,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Het scherm waar gebruikers zich kunnen aanmelden of registreren.
+ */
 public class LoginScreen {
     private final Scene scene;
     int maxAttempts = 3;
 
-
+    /**
+     * Initialiseert een nieuw LoginScreen.
+     */
     public LoginScreen() {
         FlowPane container = new FlowPane();
         container.getStyleClass().add("container");
@@ -62,6 +67,10 @@ public class LoginScreen {
         scene.getStylesheets().add(Objects.requireNonNull(Applicaction.class.getResource("stylesheets/loginscreen.css")).toString());
     }
 
+    /**
+     * Maakt het aanmeldingsformulier.
+     * @return Een VBox die het aanmeldingsformulier bevat.
+     */
     private VBox getLoginForm() {
         VBox loginForm = new VBox();
         loginForm.setSpacing(10);
@@ -84,6 +93,11 @@ public class LoginScreen {
         return loginForm;
     }
 
+    /**
+     * Behandelt het inlogproces.
+     * @param usernameField Het veld voor gebruikersnaam.
+     * @param passwordField Het veld voor wachtwoord.
+     */
     private void handleLogin(TextField usernameField, PasswordField passwordField) {
         int localMaxAttempts = maxAttempts;
         boolean loginSuccessful = false;
@@ -129,7 +143,10 @@ public class LoginScreen {
         }
     }
 
-
+    /**
+     * Maakt het registratieformulier.
+     * @return Een VBox die het registratieformulier bevat.
+     */
     private VBox getRegisterForm() {
         VBox registerForm = new VBox();
         registerForm.setSpacing(10);
@@ -162,9 +179,18 @@ public class LoginScreen {
         return registerForm;
     }
 
+    /**
+     * Behandelt het registratieproces.
+     *
+     * @param  usernameField   Het veld voor het invoeren van de gebruikersnaam
+     * @param  passwordField   Het veld voor het invoeren van het wachtwoord
+     * @param  firstnameField  Het veld voor het invoeren van de voornaam
+     * @param  lastnameField   Het veld voor het invoeren van de achternaam
+     */
     private void handleRegister(TextField usernameField, PasswordField passwordField, TextField firstnameField, TextField lastnameField) {
         boolean usernameTaken = false;
 
+        // Check of alle velden zijn ingevuld
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty() || firstnameField.getText().isEmpty() || lastnameField.getText().isEmpty()) {
             Controller.showAlert(Alert.AlertType.ERROR, "Error", "Incomplete Information", "Please fill in all fields");
             return;
@@ -177,16 +203,17 @@ public class LoginScreen {
                     break;
                 }
             }
-
+            // Check of de gebruikersnaam niet al in gebruik is
             if (!usernameTaken) {
                 String insertQuery = "INSERT INTO Golfer(username, password, firstname, lastname) VALUES (?, ?, ?, ?)";
-                try (PreparedStatement preparedStatement = Applicaction.connection.getConnection().prepareStatement(insertQuery)) {
+                try (PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(insertQuery)) {
                     preparedStatement.setString(1, usernameField.getText());
                     preparedStatement.setString(2, passwordField.getText());
                     preparedStatement.setString(3, firstnameField.getText());
                     preparedStatement.setString(4, lastnameField.getText());
                     preparedStatement.executeUpdate();
 
+                    // Maakt een nieuw user aan
                     User newUser = new User(usernameField.getText(), passwordField.getText());
                     Golfer newGolfer = new Golfer(firstnameField.getText(), lastnameField.getText(), 54);
 
@@ -204,6 +231,10 @@ public class LoginScreen {
         }
     }
 
+    /**
+     * Haalt de gebruikersinformatie op uit de database.
+     * @return Een ResultSet met de gebruikersinformatie.
+     */
     private ResultSet getUsers() {
         try {
             ResultSet golfer = Applicaction.connection.query("SELECT * FROM Golfer");
@@ -214,12 +245,22 @@ public class LoginScreen {
         }
     }
 
+    /**
+     * Geeft het Scene-object van het LoginScreen terug.
+     * @return Het Scene-object van het LoginScreen.
+     */
     public Scene getScene() {
         return scene;
     }
 
+    /**
+     * Laat het startscherm zien na een succesvolle aanmelding.
+     * @param user De aangemelde gebruiker.
+     * @param golfer De bijbehorende golferinformatie.
+     */
     private void showHomeScreen(User user, Golfer golfer) {
         HomeScreen homeScreen = new HomeScreen(user, golfer);
         Applicaction.mainStage.setScene(homeScreen.getScene());
     }
+
 }

@@ -2,10 +2,10 @@ package com.floris.golfscoretrackingsystem.screens;
 
 import com.floris.golfscoretrackingsystem.Applicaction;
 import com.floris.golfscoretrackingsystem.classes.Controller;
-import com.floris.golfscoretrackingsystem.utils.CourseScreenUtils;
 import com.floris.golfscoretrackingsystem.classes.Course;
 import com.floris.golfscoretrackingsystem.classes.Golfer;
 import com.floris.golfscoretrackingsystem.classes.User;
+import com.floris.golfscoretrackingsystem.utils.CourseScreenUtils;
 import com.floris.golfscoretrackingsystem.utils.Utils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,11 +16,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Het scherm dat de lijst met cursussen weergeeft.
+ */
 public class CourseScreen {
     private final Scene scene;
     private final HomeScreen homeScreen;
@@ -28,6 +32,13 @@ public class CourseScreen {
     public User currentUser;
     public Golfer currentGolfer;
 
+    /**
+     * Initialiseert een nieuw CourseScreen.
+     *
+     * @param homeScreen Het startscherm van de toepassing.
+     * @param user       De huidige gebruiker van de toepassing.
+     * @param golfer     De huidige golfer van de toepassing.
+     */
     public CourseScreen(HomeScreen homeScreen, User user, Golfer golfer) {
         this.homeScreen = homeScreen;
         this.currentGolfer = golfer;
@@ -57,21 +68,42 @@ public class CourseScreen {
         Applicaction.scenes.put("Courses", scene);
     }
 
+    /**
+     * Geeft de navigatiebalk van het scherm terug.
+     *
+     * @return De navigatiebalk.
+     */
     public FlowPane getNavBar() {
         FlowPane navBar = CourseScreenUtils.getNavBar("Courses", this, homeScreen, tableView, currentGolfer, currentUser);
         return navBar;
     }
 
+    /**
+     * Geeft de header van het scherm terug.
+     *
+     * @return De header.
+     */
     private FlowPane getHeader() {
         FlowPane header = Utils.getHeader(currentGolfer);
         return header;
     }
 
+    /**
+     * Geeft het logo van het scherm terug.
+     *
+     * @return Het logo.
+     */
     private FlowPane getLogo() {
         FlowPane logo = Utils.getLogo();
         return logo;
     }
 
+    /**
+     * Haalt de lijst met cursussen op uit de database.
+     *
+     * @return Een FlowPane met de tabelweergave van de cursussen.
+     * @throws SQLException Als er een SQL-fout optreedt bij het ophalen van de cursusgegevens.
+     */
     private FlowPane getCourses() throws SQLException {
         FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER);
@@ -81,9 +113,12 @@ public class CourseScreen {
                 "FROM Round\n" +
                 "JOIN Course ON Round.courseID = Course.id\n" +
                 "JOIN Golfer ON Round.golferID = Golfer.id\n" +
-                "WHERE Golfer.username = '" + currentUser.getUsername() + "';";
+                "WHERE Golfer.username = ?;";
 
-        ResultSet courses = Applicaction.connection.query(query);
+        PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(query);
+        preparedStatement.setString(1, currentUser.getUsername());
+
+        ResultSet courses = preparedStatement.executeQuery();
 
         ArrayList<Course> courseList = new ArrayList<>();
 
@@ -109,6 +144,11 @@ public class CourseScreen {
         return null;
     }
 
+    /**
+     * Herlaadt het scherm.
+     *
+     * @param tableView De FlowPane die de TableView bevat.
+     */
     public void reload(FlowPane tableView) {
         tableView.getChildren().clear();
         Controller.run(() -> {
@@ -120,9 +160,12 @@ public class CourseScreen {
         });
     }
 
+    /**
+     * Geeft het scherm terug.
+     *
+     * @return Het scherm.
+     */
     public Scene getScene() {
         return scene;
     }
-
 }
-

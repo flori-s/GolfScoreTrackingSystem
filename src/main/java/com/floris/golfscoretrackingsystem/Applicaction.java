@@ -8,11 +8,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * De hoofdklasse van de Golf Score Tracking System applicatie.
+ */
 public class Applicaction extends Application {
     public static Stage mainStage;
     public static DatabaseConn connection;
     public static HashMap<String, Scene> scenes = new HashMap<>();
     public static int[] applicationSize = {1512, 873};
+
+    /**
+     * De startmethode van de applicatie.
+     * @param stage Het hoofdpodium van de applicatie.
+     * @throws IOException Wanneer er een fout optreedt tijdens het initialiseren van de applicatie.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         connection = new DatabaseConn("adainforma.tk", "golfscoretrackingsystem", "57Yg$6cq7", "bp2_golfscoretrackingsystem");
@@ -30,6 +39,10 @@ public class Applicaction extends Application {
         mainStage.show();
     }
 
+    /**
+     * De hoofdmethode van de applicatie.
+     * @param args De opdrachtregelargumenten.
+     */
     public static void main(String[] args) {
         launch();
     }

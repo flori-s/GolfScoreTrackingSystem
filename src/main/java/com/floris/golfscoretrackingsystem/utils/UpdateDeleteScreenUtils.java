@@ -18,7 +18,15 @@ public class UpdateDeleteScreenUtils {
     private static FlowPane navBar;
     private static FlowPane navItem;
 
-
+    /**
+     * Geeft een navigatiebalk voor de applicatie terug.
+     *
+     * @param  name         de naam van het huidige scherm
+     * @param  homeScreen   het startscherm
+     * @param  currentGolfer   de huidige golfer
+     * @param  currentUser   de huidige gebruiker
+     * @return              de navigatiebalk als een FlowPane
+     */
     public static FlowPane getNavBar(String name, HomeScreen homeScreen, Golfer currentGolfer, User currentUser) {
         navBar = new FlowPane();
         navBar.getStyleClass().add("navbar");
@@ -35,10 +43,27 @@ public class UpdateDeleteScreenUtils {
         return navBar;
     }
 
+    /**
+     * Checkt of de title gelijk is aan de name.
+     *
+     * @param  title   the title to compare
+     * @param  name    the name to compare
+     * @return        true if the title is equal to the name, false otherwise
+     */
     public static boolean isActive(String title, String name) {
         return title.equals(name);
     }
 
+    /**
+     * Genereert een navigatie-item.
+     *
+     * @param  title        the title of the navigation item
+     * @param  active       whether the navigation item is active
+     * @param  homeScreen   the HomeScreen object
+     * @param  currentGolfer  the current golfer
+     * @param  currentUser  the current user
+     * @return              the generated navigation item
+     */
     public static FlowPane generateNavItem(String title, boolean active, HomeScreen homeScreen, Golfer currentGolfer, User currentUser) {
         navItem = new FlowPane();
         navItem.setPadding(new Insets(0, 0, 0, 20));
@@ -67,6 +92,14 @@ public class UpdateDeleteScreenUtils {
         return navItem;
     }
 
+    /**
+     * Geeft navigation-items een on click functie
+     *
+     * @param  title         the title of the navigation item clicked
+     * @param  homeScreen    the HomeScreen instance for navigation
+     * @param  currentGolfer the current golfer for navigation
+     * @param  currentUser   the current user for navigation
+     */
     private static void handleNavItemClick(String title, HomeScreen homeScreen, Golfer currentGolfer, User currentUser) {
         switch (title) {
             case "Rounds":

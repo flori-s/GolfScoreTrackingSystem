@@ -1,50 +1,90 @@
+/* Stijlen voor de container */
 .container {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur */
 }
 
+/* Stijlen voor het toevoegformulier */
 .add-form {
-    -fx-background-radius: 5;
-    -fx-background-color: #16A34A;
+    -fx-background-radius: 5; /* Afronding van de randen */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
 }
 
+/* Stijlen voor labels */
 .label {
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
 }
 
+/* Stijlen voor tekstvelden */
 .text-field {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-prompt-text-fill: #FFFFFF;
-    -fx-border-radius: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-prompt-text-fill: #FFFFFF; /* Kleur van het hinttekst */
+    -fx-border-radius: 5; /* Afronding van de randen */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
+/* Stijlen voor datumvelden */
 .date-field {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-border-radius: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-border-radius: 5; /* Afronding van de randen */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
 .date-field .date-picker-popup > .month-year-pane {
-    -fx-background-color: #16A34A;
+    -fx-background-color: #16A34A; /* Achtergrondkleur van de datumkiezer */
 }
 
+/* Stijlen voor de navigatiebalk */
 .navbar {
-    -fx-orientation: HORIZONTAL;
-    -fx-background-color: #16A34A;
-    -fx-hgap: 40;
+    -fx-orientation: HORIZONTAL; /* Horizontale oriëntatie */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-hgap: 40; /* Horizontale afstand tussen items */
 }
 
+/* Stijlen voor navigatie-items */
 .navitem {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent; /* Transparante achtergrondkleur */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
+/* Stijlen voor actief navigatie-item */
 .active {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur van actief item */
+    -fx-cursor: hand; /* Cursorstijl */
 }
 
+/* Stijlen voor de tekst van navigatie-items */
 .navitemText {
-    -fx-font-size: 20px;
-    -fx-fill: white;
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: white; /* Tekstkleur */
+}
+
+/* Stijlen voor knoppen */
+.button {
+    -fx-cursor: hand; /* Cursorstijl */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-border-radius: 5; /* Afronding van de randen */
+    -fx-padding: 10px 20px; /* Binnenste opvulling */
+}
+
+/* Stijlen voor het logo */
+.logo {
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+.logo Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
+}
+
+/* Stijlen voor de koptekst */
+.header{
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+.header Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
 }

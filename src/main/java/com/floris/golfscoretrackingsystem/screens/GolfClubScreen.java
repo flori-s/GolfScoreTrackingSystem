@@ -16,19 +16,29 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Het scherm dat de lijst met golfclubs van een gebruiker weergeeft.
+ */
 public class GolfClubScreen {
     private final Scene scene;
     private final HomeScreen homeScreen;
     private final FlowPane tableView;
     public User currentUser;
-
     public Golfer currentGolfer;
 
+    /**
+     * Initialiseert een nieuw GolfClubScreen.
+     *
+     * @param homeScreen Het startscherm van de toepassing.
+     * @param user       De huidige gebruiker van de toepassing.
+     * @param golfer     De huidige golfer van de toepassing.
+     */
     public GolfClubScreen(HomeScreen homeScreen, User user, Golfer golfer) {
         this.homeScreen = homeScreen;
         this.currentGolfer = golfer;
@@ -58,21 +68,42 @@ public class GolfClubScreen {
         Applicaction.scenes.put("Golfclubs", scene);
     }
 
+    /**
+     * Geeft de navigatiebalk van het scherm terug.
+     *
+     * @return De navigatiebalk.
+     */
     public FlowPane getNavBar() {
         FlowPane navBar = GolfclubScreenUtils.getNavBar("Golfclubs", this, homeScreen, tableView, currentGolfer, currentUser);
         return navBar;
     }
 
+    /**
+     * Geeft de header van het scherm terug.
+     *
+     * @return De header.
+     */
     private FlowPane getHeader() {
         FlowPane header = Utils.getHeader(currentGolfer);
         return header;
     }
 
+    /**
+     * Geeft het logo van het scherm terug.
+     *
+     * @return Het logo.
+     */
     private FlowPane getLogo() {
         FlowPane logo = Utils.getLogo();
         return logo;
     }
 
+    /**
+     * Haalt de lijst met golfclubs van de gebruiker op uit de database.
+     *
+     * @return Een FlowPane met de tabelweergave van de golfclubs.
+     * @throws SQLException Als er een SQL-fout optreedt bij het ophalen van de golfclubgegevens.
+     */
     private FlowPane getGolfClubs() throws SQLException {
         FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER);
@@ -81,9 +112,12 @@ public class GolfClubScreen {
         String query = "SELECT * \n" +
                 "FROM Golfclub gc\n" +
                 "JOIN Golfer g ON gc.golfer_id = g.id\n" +
-                "WHERE username = '" + currentUser.getUsername() + "';";
+                "WHERE username = ?;";
 
-        ResultSet golfclubs = Applicaction.connection.query(query);
+        PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(query);
+        preparedStatement.setString(1, currentUser.getUsername());
+
+        ResultSet golfclubs = preparedStatement.executeQuery();
 
         ArrayList<Golfclub> golfclubList = new ArrayList<>();
 
@@ -109,6 +143,11 @@ public class GolfClubScreen {
         return null;
     }
 
+    /**
+     * Herlaadt het scherm.
+     *
+     * @param tableView De FlowPane die de TableView bevat.
+     */
     public void reload(FlowPane tableView) {
         tableView.getChildren().clear();
         Controller.run(() -> {
@@ -120,8 +159,12 @@ public class GolfClubScreen {
         });
     }
 
+    /**
+     * Geeft het scherm terug.
+     *
+     * @return Het scherm.
+     */
     public Scene getScene() {
         return scene;
     }
-
 }
