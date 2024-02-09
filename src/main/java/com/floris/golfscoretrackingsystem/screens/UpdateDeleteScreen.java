@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,6 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Het UpdateDeleteScreen klasse biedt functionaliteit voor het bijwerken en verwijderen van rondes.
+ */
 public class UpdateDeleteScreen {
 
     private final Scene scene;
@@ -34,6 +38,13 @@ public class UpdateDeleteScreen {
     public Golfer currentGolfer;
     public User currentUser;
 
+    /**
+     * Constructor voor UpdateDeleteScreen.
+     * @param id Het ID van de huidige ronde.
+     * @param homeScreen Het startscherm van de applicatie.
+     * @param golfer De huidige golfer.
+     * @param user De huidige gebruiker.
+     */
     public UpdateDeleteScreen(int id, HomeScreen homeScreen, Golfer golfer, User user) {
         this.currentGolfer = golfer;
         this.currentRound = id;
@@ -42,9 +53,13 @@ public class UpdateDeleteScreen {
         Pane root = new Pane();
         GridPane gridPane = new GridPane();
 
+        HBox buttons = new HBox();
+        buttons.setSpacing(10);
+        buttons.getChildren().addAll(getUpdateButton(), getDeleteButton());
+
         this.form = new FlowPane();
         try {
-            form.getChildren().addAll(getUpdateForm(currentRound), getUpdateButton());
+            form.getChildren().addAll(getUpdateForm(), buttons);
             form.getStyleClass().add("form");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -68,20 +83,37 @@ public class UpdateDeleteScreen {
         Applicaction.scenes.put("UpdateDelete", scene);
     }
 
+    /**
+     * Geeft de navigatiebalk van het UpdateDelete-scherm terug.
+     * @return De FlowPane met de navigatiebalk.
+     */
     private FlowPane getNavBar() {
         return UpdateDeleteScreenUtils.getNavBar("Rounds", homeScreen, currentGolfer, currentUser);
     }
 
+    /**
+     * Geeft de header van het UpdateDelete-scherm terug.
+     * @return De FlowPane met de header.
+     */
     private FlowPane getHeader() {
         return Utils.getHeader(currentGolfer);
     }
 
+    /**
+     * Geeft het logo van het UpdateDelete-scherm terug.
+     * @return De FlowPane met het logo.
+     */
     private FlowPane getLogo() {
         return Utils.getLogo();
     }
 
 
-    private FlowPane getUpdateForm(int id) throws SQLException {
+    /**
+     * Geeft het formulier voor het bijwerken van de ronde terug.
+     * @return De FlowPane met het updateformulier.
+     * @throws SQLException Als er een SQL-fout optreedt tijdens het ophalen van de gegevens voor de ronde.
+     */
+    private FlowPane getUpdateForm() throws SQLException {
         FlowPane form = new FlowPane();
         form.setPadding(new Insets(10, 10, 10, 10));
         form.getStyleClass().add("update-delete-screen");
@@ -94,10 +126,12 @@ public class UpdateDeleteScreen {
                 "JOIN Course c ON r.courseID = c.id\n" +
                 "JOIN Score s ON r.scoreID = s.id\n" +
                 "JOIN Golfer g ON r.golferID = g.id\n" +
-                "WHERE r.id = " + id + "\n" +
+                "WHERE r.id = ?\n" +
                 "ORDER BY r.id ASC;";
         try {
-            ResultSet rounds = Applicaction.connection.query(query);
+            PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(query);
+            preparedStatement.setInt(1, currentRound);
+            ResultSet rounds = preparedStatement.executeQuery();
 
             while (rounds.next()) {
                 String datePlayed = rounds.getString("dateplayed");
@@ -106,8 +140,8 @@ public class UpdateDeleteScreen {
                 String strokes = rounds.getString("strokes");
                 String notes = rounds.getString("notes");
                 String condition = rounds.getString("condition");
-                String temperature = rounds.getString("temperature") + " °C";
-                String windSpeed = rounds.getString("windspeed") + " km/h";
+                String temperature = rounds.getString("temperature");
+                String windSpeed = rounds.getString("windspeed");
 
                 form.getChildren().addAll(
                         Controller.createDateFieldBox("Date: ", datePlayed),
@@ -116,8 +150,8 @@ public class UpdateDeleteScreen {
                         Controller.createFieldBox("Strokes: ", strokes),
                         Controller.createFieldBox("Notes: ", notes),
                         Controller.createFieldBox("Condition: ", condition),
-                        Controller.createFieldBox("Temperature: ", temperature),
-                        Controller.createFieldBox("Wind Speed: ", windSpeed)
+                        Controller.createFieldBox("Temperature °C: ", temperature),
+                        Controller.createFieldBox("Wind Speed km/h: ", windSpeed)
                 );
             }
         } catch (SQLException e) {
@@ -128,6 +162,10 @@ public class UpdateDeleteScreen {
         return form;
     }
 
+    /**
+     * Geeft de knop voor het bijwerken van de ronde terug.
+     * @return De knop voor het bijwerken van de ronde.
+     */
     private Button getUpdateButton() {
         Button updateButton = new Button("Update");
         updateButton.getStyleClass().add("button");
@@ -146,11 +184,8 @@ public class UpdateDeleteScreen {
             String newStrokes = fieldValues.get("Strokes: ");
             String newNotes = fieldValues.get("Notes: ");
             String newCondition = fieldValues.get("Condition: ");
-            String Temperature = fieldValues.get("Temperature: ");
-            String WindSpeed = fieldValues.get("Wind Speed: ");
-
-            String newTemperature = Temperature != null ? Temperature.replaceAll("[^\\d.]", "") : null;
-            String newWindSpeed = WindSpeed != null ? WindSpeed.replaceAll("[^\\d.]", "") : null;
+            String Temperature = fieldValues.get("Temperature °C: ");
+            String WindSpeed = fieldValues.get("Wind Speed km/h: ");
 
             String updateQuery = "UPDATE Round r\n" +
                     "JOIN WeatherCondition wc ON r.conditionID = wc.id\n" +
@@ -158,24 +193,35 @@ public class UpdateDeleteScreen {
                     "JOIN Score s ON r.scoreID = s.id\n" +
                     "JOIN Golfer g ON r.golferID = g.id\n" +
                     "SET \n" +
-                    "    r.dateplayed = '" + newDate + "',\n" +
-                    "    c.name = '" + newName + "',\n" +
-                    "    c.location = '" + newLocation + "',\n" +
-                    "    s.strokes = '" + newStrokes + "',\n" +
-                    "    s.notes =  '" + newNotes + "',\n" +
-                    "    wc.condition = '" + newCondition + "',\n" +
-                    "    wc.temperature = '" + newTemperature + "',\n" +
-                    "    wc.windspeed = '" + newWindSpeed + "'\n" +
-                    "WHERE r.id = " + currentRound + ";";
+                    "    r.dateplayed = ?,\n" +
+                    "    c.name = ?,\n" +
+                    "    c.location = ?,\n" +
+                    "    s.strokes = ?,\n" +
+                    "    s.notes = ?,\n" +
+                    "    wc.condition = ?,\n" +
+                    "    wc.temperature = ?,\n" +
+                    "    wc.windspeed = ?\n" +
+                    "WHERE r.id = ?;";
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Update");
             alert.setHeaderText(null);
-            alert.setContentText("Are you sure you want to update this round?" + "\n" + "Date: " + newDate + "\n" + " Course: " + newName + "\n" + " Location: " + newLocation + "\n" + "Strokes: " + newStrokes + "\n" + "Notes: " + newNotes + "\n" + "Temperature: " + newTemperature + "\n" + "Wind Speed: " + newWindSpeed);
+            alert.setContentText("Are you sure you want to update this round?" + "\n" + "Date: " + newDate + "\n" + " Course: " + newName + "\n" + " Location: " + newLocation + "\n" + "Strokes: " + newStrokes + "\n" + "Notes: " + newNotes + "\n" + "Temperature: " + Temperature + "\n" + "Wind Speed: " + WindSpeed);
 
             if (alert.showAndWait().get() == ButtonType.OK) {
                 try {
-                    Applicaction.connection.updateQuery(updateQuery);
+                    PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(updateQuery);
+                    preparedStatement.setString(1, newDate);
+                    preparedStatement.setString(2, newName);
+                    preparedStatement.setString(3, newLocation);
+                    preparedStatement.setString(4, newStrokes);
+                    preparedStatement.setString(5, newNotes);
+                    preparedStatement.setString(6, newCondition);
+                    preparedStatement.setString(7, Temperature);
+                    preparedStatement.setString(8, WindSpeed);
+                    preparedStatement.setInt(9, currentRound);
+
+                    preparedStatement.executeUpdate();
                     homeScreen.reload();
                     Applicaction.mainStage.setScene(homeScreen.getScene());
                 } catch (SQLException exception) {
@@ -187,6 +233,42 @@ public class UpdateDeleteScreen {
         return updateButton;
     }
 
+    /**
+     * Geeft de knop voor het verwijderen van de ronde terug.
+     * @return De knop voor het verwijderen van de ronde.
+     */
+    private Button getDeleteButton() {
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("button");
+
+        deleteButton.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("Delete Round");
+            alert.setContentText("Are you sure you want to delete this round?");
+
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                try {
+                    String deleteQuery = "DELETE FROM Round WHERE id = ?";
+                    PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(deleteQuery);
+                    preparedStatement.setInt(1, currentRound);
+                    preparedStatement.executeUpdate();
+                    homeScreen.reload();
+                    Applicaction.mainStage.setScene(homeScreen.getScene());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    Controller.showAlert(Alert.AlertType.ERROR, "Error", "Database Error", "Error accessing the database");
+                }
+            }
+        });
+
+        return deleteButton;
+    }
+
+    /**
+     * Haalt de waarden op uit de formuliervelden.
+     * @return Een Map met de waarden van de formuliervelden.
+     */
     private Map<String, String> getFormFieldValues() {
         Map<String, String> fieldValues = new HashMap<>();
 
@@ -230,7 +312,10 @@ public class UpdateDeleteScreen {
         return fieldValues;
     }
 
-
+    /**
+     * Geeft het Scene-object van het UpdateDelete-scherm terug.
+     * @return Het Scene-object van het UpdateDelete-scherm.
+     */
     public Scene getScene() {
         return scene;
     }

@@ -1,57 +1,93 @@
+/* Formulier */
 .form {
-    -fx-background-color: #166534;
+    -fx-background-color: #166534; /* Achtergrondkleur */
 }
 
+/* Update en verwijder scherm */
 .update-delete-screen {
-    -fx-background-radius: 5;
-    -fx-background-color: #16A34A;
+    -fx-background-radius: 5; /* Randradius */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
 }
 
+/* Label */
 .label {
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
 }
 
+/* Tekstvelden */
 .text-field {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-prompt-text-fill: #FFFFFF;
-    -fx-border-radius: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-prompt-text-fill: #FFFFFF; /* Kleur van plaatsaanduidingstekst */
+    -fx-border-radius: 5; /* Randradius */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
+/* Datumvelden */
 .date-field {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-border-radius: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-border-radius: 5; /* Randradius */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0); /* Schaduweffect */
 }
 
+/* Datumkiezer popup */
 .date-field .date-picker-popup > .month-year-pane {
-    -fx-background-color: #16A34A;
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
 }
 
+/* Knoppen */
 .button {
-    -fx-background-color: #16A34A;
-    -fx-text-fill: #FFFFFF;
-    -fx-border-radius: 5;
-    -fx-padding: 10px 20px;
+    -fx-cursor: hand; /* Cursorstijl */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-text-fill: #FFFFFF; /* Tekstkleur */
+    -fx-border-radius: 5; /* Randradius */
+    -fx-padding: 10px 20px; /* Binnenmarge */
 }
 
+/* Navigatiebalk */
 .navbar {
-    -fx-orientation: HORIZONTAL;
-    -fx-background-color: #16A34A;
-    -fx-hgap: 40;
+    -fx-orientation: HORIZONTAL; /* Oriëntatie */
+    -fx-background-color: #16A34A; /* Achtergrondkleur */
+    -fx-hgap: 40; /* Horizontale tussenruimte */
 }
 
+/* Navigatie-item */
 .navitem {
-    -fx-background-color: transparent;
+    -fx-cursor: hand; /* Cursorstijl */
+    -fx-background-color: transparent; /* Achtergrondkleur */
 }
 
+/* Actief navigatie-item */
 .active {
-    -fx-background-color: #166534;
+    -fx-cursor: hand; /* Cursorstijl */
+    -fx-background-color: #166534; /* Achtergrondkleur */
 }
 
+/* Tekst van navigatie-item */
 .navitemText {
-    -fx-font-size: 20px;
-    -fx-fill: white;
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: white; /* Tekstkleur */
+}
+
+/* Logo */
+.logo {
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Tekst van logo */
+.logo Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
+}
+
+/* Header */
+.header{
+    -fx-background-color: #166534; /* Achtergrondkleur */
+}
+
+/* Tekst van header */
+.header Text{
+    -fx-font-size: 20px; /* Tekstgrootte */
+    -fx-fill: #ffffff; /* Tekstkleur */
 }
