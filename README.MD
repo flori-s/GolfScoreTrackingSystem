@@ -46,7 +46,7 @@ Het Golf Score Tracking System maakt gebruik van een online MySQL-database voor 
 4. **Statistieken Bekijken**: Navigeer naar het statistieken scherm om verschillende tabellen en overzichten te bekijken op basis van uw golfroundgegevens.
 
 
-## Roadmap / Tijdslijn
+## Roadmap / Tijdlijn
 
 - Implementeer data-validatie om een nauwkeurige invoer van golfroundinformatie te garanderen.
 - Voeg functionaliteit toe voor het exporteren en importeren van golfroundgegevens.
