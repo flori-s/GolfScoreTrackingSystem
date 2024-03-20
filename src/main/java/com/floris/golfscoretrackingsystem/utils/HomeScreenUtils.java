@@ -4,6 +4,7 @@ import com.floris.golfscoretrackingsystem.Applicaction;
 import com.floris.golfscoretrackingsystem.classes.*;
 import com.floris.golfscoretrackingsystem.screens.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -12,12 +13,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class HomeScreenUtils {
 
     private static FlowPane navBar;
     private static FlowPane navItem;
+    private static FlowPane header;
 
     /**
      * Geeft een navigatiebalk voor de applicatie terug.
@@ -149,6 +152,34 @@ public class HomeScreenUtils {
         roundItem.getChildren().addAll(date, golfer, course, score, weather);
 
         return roundItem;
+    }
+
+    public static FlowPane getHomeHeader(Golfer currentGolfer, User currentUser) {
+        header = new FlowPane();
+        header.setPrefSize(Applicaction.applicationSize[0] - 300, 40);
+        header.getStyleClass().add("header");
+        header.setOrientation(Orientation.VERTICAL);
+        header.setAlignment(Pos.CENTER);
+
+        FlowPane titlePane = new FlowPane();
+        titlePane.setHgap(20);
+        titlePane.setAlignment(Pos.CENTER_LEFT);
+        titlePane.setPadding(new Insets(0, 0, 0, 20));
+        titlePane.setPrefSize(Applicaction.applicationSize[0] - 300, 40);
+        titlePane.setOrientation(Orientation.HORIZONTAL);
+
+        Text welcome = null;
+        try {
+            welcome = new Text("Welcome " + currentGolfer.getFirstName() + " " + currentGolfer.getLastName() + " !" + "    Total rounds: " + currentGolfer.getTotalRounds(currentUser));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        titlePane.getChildren().add(welcome);
+
+        header.getChildren().addAll(titlePane);
+
+        return header;
     }
 }
 

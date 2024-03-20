@@ -64,7 +64,7 @@ public class HomeScreen {
     }
 
     private FlowPane getHeader() {
-        return Utils.getHeader(currentGolfer);
+        return HomeScreenUtils.getHomeHeader(currentGolfer, currentUser);
     }
 
     private FlowPane getNavBar() {

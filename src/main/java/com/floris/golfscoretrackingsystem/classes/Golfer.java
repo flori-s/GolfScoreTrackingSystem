@@ -1,8 +1,8 @@
 package com.floris.golfscoretrackingsystem.classes;
 
 import com.floris.golfscoretrackingsystem.Applicaction;
-import javafx.scene.control.Alert;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -91,5 +91,26 @@ public class Golfer {
      */
     public void setHandicap(int handicap) {
         this.handicap = handicap;
+    }
+
+    public int getTotalRounds(User currentUser) throws SQLException {
+        int totalRounds = 0;
+        String query =
+                "SELECT COUNT(Round.id) AS total_rounds, Round.dateplayed\n" +
+                        "FROM Round\n" +
+                        "JOIN Golfer ON Round.golferID = Golfer.id\n" +
+                        "WHERE Golfer.username = ?\n" +
+                        "GROUP BY Round.dateplayed;";
+
+        PreparedStatement preparedStatement = Applicaction.connection.prepareStatement(query);
+        preparedStatement.setString(1, currentUser.getUsername());
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            totalRounds += resultSet.getInt("total_rounds");
+        }
+
+        System.out.println(totalRounds);
+        return totalRounds;
     }
 }
